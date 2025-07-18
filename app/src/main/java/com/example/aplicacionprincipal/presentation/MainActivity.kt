@@ -61,6 +61,7 @@ import androidx.wear.compose.material.*
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import com.example.aplicacionprincipal.presentation.alarma.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,6 +87,7 @@ class MainActivity : ComponentActivity() {
 fun NavegacionApp(viewModel: ExerciseReminderViewModel, songList: List<TrackInfo>){
     val navController = rememberNavController()
     var currentIndex by remember { mutableStateOf(0) }
+    val listaAlarmas = remember { mutableStateListOf<Alarma>() }
 
     NavHost(navController, startDestination = "contenedor"){
         composable(route = "contenedor"){ ContenedorApps(navController)}
@@ -133,6 +135,14 @@ fun NavegacionApp(viewModel: ExerciseReminderViewModel, songList: List<TrackInfo
                 },
                 onBack = { navController.popBackStack() }
             )
+        }
+        composable("alarma") { PantallaAlarma(navController) }
+        composable("Lista") { PantallaLista(navController, listaAlarmas) }
+        composable("AgregarAlarma") {
+            AgregarAlarma(navController) { hora, diasSeleccionados ->
+                listaAlarmas.add(Alarma(hora, diasSeleccionados))
+                navController.popBackStack()
+            }
         }
     }
 }
