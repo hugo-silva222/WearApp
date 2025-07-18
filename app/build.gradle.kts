@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
@@ -66,7 +65,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.0")
 
     implementation("androidx.wear.compose:compose-material:1.2.1")
-    implementation("androidx.wear.compose:compose-foundation:1.2.1")
+    //implementation("androidx.wear.compose:compose-foundation:1.2.1")
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.material:material-icons-extended:1.6.4")
 
@@ -77,4 +76,22 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    //musica
+    // Versiones base (obligatorias)
+    implementation("androidx.core:core-ktx:1.12.0")
+
+    // Wear OS Compose (versiones estables más recientes)
+    implementation("androidx.wear.compose:compose-foundation:1.3.0")
+
+    // Jetpack Compose (compatibilidad con Wear)
+    implementation("androidx.compose.ui:ui-tooling:1.6.3")
+    implementation("androidx.compose.foundation:foundation:1.6.3")
+
+    // Para íconos
+
+    // MediaPlayer
+    implementation("androidx.media:media:1.7.0")
+    implementation("androidx.compose.material:material:1.6.4")
+
 }

@@ -52,6 +52,8 @@ import androidx.navigation.compose.composable
 import com.example.aplicacionprincipal.presentation.pantallas.*
 import com.example.aplicacionprincipal.presentation.models.*
 import com.example.aplicacionprincipal.presentation.oswaapp.*
+import com.example.aplicacionprincipal.presentation.descanso.*
+import com.example.aplicacionprincipal.presentation.musica.*
 
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
@@ -70,14 +72,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val viewModel: ExerciseReminderViewModel = viewModel()
-            NavegacionApp(viewModel)
+            val canciones = listOf(
+                TrackInfo("1", R.raw.badland, "BadLand", "Boom Kitty", R.drawable.android),
+                TrackInfo("2", R.raw.speed, "At The Speed of Light", "Dimrain47", R.drawable.android),
+                // Más canciones aquí
+            )
+            NavegacionApp(viewModel, canciones)
         }
     }
 }
 
 @Composable
-fun NavegacionApp(viewModel: ExerciseReminderViewModel){
+fun NavegacionApp(viewModel: ExerciseReminderViewModel, songList: List<TrackInfo>){
     val navController = rememberNavController()
+    var currentIndex by remember { mutableStateOf(0) }
 
     NavHost(navController, startDestination = "contenedor"){
         composable(route = "contenedor"){ ContenedorApps(navController)}
@@ -102,6 +110,29 @@ fun NavegacionApp(viewModel: ExerciseReminderViewModel){
         composable("editReminder/{day}") { backStackEntry ->
             val day = backStackEntry.arguments?.getString("day") ?: ""
             EditReminderScreen(navController, day, viewModel)
+        }
+        composable("descanso") { EyeRestScreen(navController) }
+        composable("musica") {
+            MusicPlayerScreen(
+                initialSongIndex = currentIndex,
+                songList = songList,
+                onNavigateToPlaylist = { index, _ ->
+                    currentIndex = index
+                    navController.navigate("playlist")
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+        composable("playlist") {
+            PlaylistScreen(
+                songList = songList,
+                currentPlayingIndex = currentIndex,
+                onSongSelected = { selectedIndex ->
+                    currentIndex = selectedIndex
+                    navController.popBackStack()
+                },
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
@@ -314,13 +345,73 @@ fun Aplicaciones(navController: NavController){
                         navController.navigate("oswaApp")
                     },
                     label = {Text(
-                        text = "OswaldoApp",
+                        text = "Repeticiones",
                         fontSize = 10.sp,
                         fontFamily = FontFamily.Monospace,
                         color = Color.White,
                     )},
                     icon = {Icon(
                         painter = painterResource(id = R.drawable.android),
+                        contentDescription = "",
+                        modifier = Modifier.size(size = 20.dp)
+                    )},
+                    colors = ChipDefaults.primaryChipColors(backgroundColor = Color.Gray),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            item {
+                Chip(
+                    onClick = {
+                        navController.navigate("descanso")
+                    },
+                    label = {Text(
+                        text = "Descanso Visual",
+                        fontSize = 10.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = Color.White,
+                    )},
+                    icon = {Icon(
+                        painter = painterResource(id = R.drawable.view),
+                        contentDescription = "",
+                        modifier = Modifier.size(size = 20.dp)
+                    )},
+                    colors = ChipDefaults.primaryChipColors(backgroundColor = Color.DarkGray),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            item {
+                Chip(
+                    onClick = {
+                        navController.navigate("musica")
+                    },
+                    label = {Text(
+                        text = "Musica",
+                        fontSize = 10.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = Color.White,
+                    )},
+                    icon = {Icon(
+                        painter = painterResource(id = R.drawable.musical),
+                        contentDescription = "",
+                        modifier = Modifier.size(size = 20.dp)
+                    )},
+                    colors = ChipDefaults.primaryChipColors(backgroundColor = Color.Gray),
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            item {
+                Chip(
+                    onClick = {
+                        navController.navigate("alarma")
+                    },
+                    label = {Text(
+                        text = "Alarma",
+                        fontSize = 10.sp,
+                        fontFamily = FontFamily.Monospace,
+                        color = Color.White,
+                    )},
+                    icon = {Icon(
+                        painter = painterResource(id = R.drawable.alarm),
                         contentDescription = "",
                         modifier = Modifier.size(size = 20.dp)
                     )},
